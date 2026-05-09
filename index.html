@@ -32,23 +32,18 @@
       position: relative;
     }
 
-    /* Scanlines */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.08) 2px,
-        rgba(0,0,0,0.08) 4px
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
       );
       pointer-events: none;
       z-index: 10;
     }
 
-    /* CRT vignette */
     body::after {
       content: '';
       position: fixed;
@@ -59,6 +54,14 @@
     }
 
     .ascii-banner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: flicker 6s infinite;
+    }
+
+    .ascii-zerker {
+      font-size: clamp(5px, 1.3vw, 15px);
       line-height: 1.2;
       white-space: pre;
       text-align: center;
@@ -67,11 +70,19 @@
         0 0 8px rgba(0,255,65,0.9),
         0 0 20px rgba(0,255,65,0.4),
         0 0 40px rgba(0,255,65,0.15);
-      animation: flicker 6s infinite;
     }
 
-    .ascii-zerker {
-      font-size: clamp(5px, 1.1vw, 13px);
+    .ascii-labs {
+      font-size: clamp(5px, 1.3vw, 15px);
+      line-height: 1.2;
+      white-space: pre;
+      text-align: center;
+      color: var(--green-dim);
+      text-shadow:
+        0 0 6px rgba(0,255,65,0.5),
+        0 0 16px rgba(0,255,65,0.2);
+      margin-top: 0.4em;
+      letter-spacing: 0.05em;
     }
 
     @keyframes flicker {
@@ -124,6 +135,7 @@
       min-height: 1.4em;
     }
 
+    .prompt { color: var(--green-faint); }
     .typed-text { color: var(--green); }
 
     .cursor {
@@ -157,12 +169,18 @@
 <body>
 
   <div class="ascii-banner">
-<pre class="ascii-zerker">______ ___________ _   __ ___________   _       ___  ______  _____ 
-|___  /|  ___| ___ \ | / /|  ___| ___ \ | |     / _ \ | ___ \/  ___|
-   / / | |__ | |_/ / |/ / | |__ | |_/ / | |    / /_\ \| |_/ /\ `--.
-  / /  |  __||    /|    \ |  __||    /  | |    |  _  || ___ \ `--. \
-./ /___| |___| |\ \| |\  \| |___| |\ \  | |____| | | || |_/ //\__/ /
-\_____/\____/\_| \_\_| \_/\____/\_| \_| \_____/\_| |_/\____/ \____/</pre>
+    <pre class="ascii-zerker">______ ___________ _   __ ___________ 
+|___  /|  ___| ___ \ | / /|  ___| ___ \
+   / / | |__ | |_/ / |/ / | |__ | |_/ /
+  / /  |  __||    /|    \ |  __||    / 
+./ /___| |___| |\ \| |\  \| |___| |\ \ 
+\_____/\____/\_| \_\_| \_/\____/\_| \_|</pre>
+    <pre class="ascii-labs">_       ___  ______  _____ 
+| |     / _ \ | ___ \/  ___|
+| |    / /_\ \| |_/ /\ `--.
+| |    |  _  || ___ \ `--. \
+| |____| | | || |_/ //\__/ /
+\_____/\_| |_/\____/ \____/</pre>
   </div>
 
   <div class="tagline">
@@ -170,13 +188,13 @@
   </div>
 
   <div class="links">
-    <a href="/about">about</a>
+    <a href="about.html">about</a>
     <a href="https://treeship.dev" target="_blank">treeship.dev</a>
-    <a href="/blog">blog</a>
+    <a href="blog.html">blog</a>
   </div>
 
   <div class="cursor-line">
-    C:\ZERKER&gt;&nbsp;<span class="typed-text" id="typed"></span><span class="cursor"></span>
+    <span class="prompt">agent@zerkerlabs:~$</span>&nbsp;<span class="typed-text" id="typed"></span><span class="cursor"></span>
   </div>
 
   <div class="partner" id="partner">
@@ -185,8 +203,10 @@
 
   <script>
     const lines = [
-      "solving trust in AI",
-      "first product: treeship.dev",
+      "treeship --sign --action agent_payment_4f2a",
+      "receipt verified. chain updated. trust granted.",
+      "solving trust in AI, one receipt at a time",
+      "what did your agent do at 3am?",
       "every agent action deserves a receipt",
     ];
 
@@ -202,10 +222,10 @@
         charIndex++;
         if (charIndex >= current.length) {
           deleting = true;
-          setTimeout(type, 1800);
+          setTimeout(type, 2200);
           return;
         }
-        setTimeout(type, 48);
+        setTimeout(type, 44);
       } else {
         el.textContent = current.slice(0, charIndex - 1);
         charIndex--;
@@ -213,10 +233,10 @@
           deleting = false;
           lineIndex = (lineIndex + 1) % lines.length;
           charIndex = 0;
-          setTimeout(type, 400);
+          setTimeout(type, 500);
           return;
         }
-        setTimeout(type, 28);
+        setTimeout(type, 22);
       }
     }
 
