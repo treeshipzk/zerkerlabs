@@ -54,14 +54,7 @@
     }
 
     .ascii-banner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      animation: flicker 6s infinite;
-    }
-
-    .ascii-zerker {
-      font-size: clamp(5px, 1.3vw, 15px);
+      font-size: clamp(4px, 1vw, 12px);
       line-height: 1.2;
       white-space: pre;
       text-align: center;
@@ -70,19 +63,7 @@
         0 0 8px rgba(0,255,65,0.9),
         0 0 20px rgba(0,255,65,0.4),
         0 0 40px rgba(0,255,65,0.15);
-    }
-
-    .ascii-labs {
-      font-size: clamp(5px, 1.3vw, 15px);
-      line-height: 1.2;
-      white-space: pre;
-      text-align: center;
-      color: var(--green-dim);
-      text-shadow:
-        0 0 6px rgba(0,255,65,0.5),
-        0 0 16px rgba(0,255,65,0.2);
-      margin-top: 0.4em;
-      letter-spacing: 0.05em;
+      animation: flicker 6s infinite;
     }
 
     @keyframes flicker {
@@ -95,7 +76,7 @@
 
     .tagline {
       margin-top: 2.5rem;
-      font-size: clamp(11px, 1.4vw, 15px);
+      font-size: clamp(11px, 1.3vw, 14px);
       color: var(--green-dim);
       letter-spacing: 0.25em;
       text-transform: uppercase;
@@ -103,6 +84,33 @@
     }
 
     .tagline span { color: var(--green); }
+
+    .products {
+      margin-top: 1.8rem;
+      display: flex;
+      gap: 2rem;
+      font-size: clamp(9px, 1vw, 11px);
+      letter-spacing: 0.15em;
+    }
+
+    .products a {
+      color: var(--green-faint);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.15s, text-shadow 0.15s;
+      border-bottom: 1px solid var(--green-faint);
+      padding-bottom: 2px;
+    }
+
+    .products a:hover {
+      color: var(--green-dim);
+      border-bottom-color: var(--green-dim);
+    }
+
+    .products a.active {
+      color: var(--green-dim);
+      border-bottom-color: var(--green-faint);
+    }
 
     .links {
       margin-top: 2rem;
@@ -168,28 +176,23 @@
 </head>
 <body>
 
-  <div class="ascii-banner">
-    <pre class="ascii-zerker">______ ___________ _   __ ___________ 
-|___  /|  ___| ___ \ | / /|  ___| ___ \
-   / / | |__ | |_/ / |/ / | |__ | |_/ /
-  / /  |  __||    /|    \ |  __||    / 
-./ /___| |___| |\ \| |\  \| |___| |\ \ 
-\_____/\____/\_| \_\_| \_/\____/\_| \_|</pre>
-    <pre class="ascii-labs">_       ___  ______  _____ 
-| |     / _ \ | ___ \/  ___|
-| |    / /_\ \| |_/ /\ `--.
-| |    |  _  || ___ \ `--. \
-| |____| | | || |_/ //\__/ /
-\_____/\_| |_/\____/ \____/</pre>
-  </div>
+<pre class="ascii-banner">______ ___________ _   __ ___________   _       ___  ______  _____
+|___  /|  ___| ___ \ | / /|  ___| ___ \ | |     / _ \ | ___ \/  ___|
+   / / | |__ | |_/ / |/ / | |__ | |_/ / | |    / /_\ \| |_/ /\ `--.
+  / /  |  __||    /|    \ |  __||    /  | |    |  _  || ___ \ `--. \
+./ /___| |___| |\ \| |\  \| |___| |\ \  | |____| | | || |_/ //\__/ /
+\_____/\____/\_| \_\_| \_/\____/\_| \_| \_____/\_| |_/\____/ \____/</pre>
 
   <div class="tagline">
-    <span>trust</span> is infrastructure
+    a product lab solving <span>trust in AI</span>
+  </div>
+
+  <div class="products">
+    <a href="https://treeship.dev" target="_blank">treeship.dev →</a>
   </div>
 
   <div class="links">
     <a href="about.html">about</a>
-    <a href="https://treeship.dev" target="_blank">treeship.dev</a>
     <a href="blog.html">blog</a>
   </div>
 
@@ -203,11 +206,10 @@
 
   <script>
     const lines = [
-      "treeship --sign --action agent_payment_4f2a",
-      "receipt verified. chain updated. trust granted.",
-      "solving trust in AI, one receipt at a time",
       "what did your agent do at 3am?",
-      "every agent action deserves a receipt",
+      "trust is not a feature. it is infrastructure.",
+      "agents act. receipts prove it.",
+      "building the trust layer for autonomous systems",
     ];
 
     let lineIndex = 0;
