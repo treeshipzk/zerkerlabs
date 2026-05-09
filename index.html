@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZERKERLABS</title>
+  <style>
+    :root {
+      --green: #00ff41;
+      --green-dim: #00aa2a;
+      --green-faint: #003a0e;
+      --bg: #000000;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--green);
+      font-family: 'Courier New', Courier, monospace;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+      position: relative;
+    }
+
+    /* Scanlines */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* CRT vignette */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.65) 100%);
+      pointer-events: none;
+      z-index: 9;
+    }
+
+    .ascii-banner {
+      font-size: clamp(5px, 1.1vw, 13px);
+      line-height: 1.2;
+      white-space: pre;
+      text-align: center;
+      color: var(--green);
+      text-shadow:
+        0 0 8px rgba(0,255,65,0.9),
+        0 0 20px rgba(0,255,65,0.4),
+        0 0 40px rgba(0,255,65,0.15);
+      animation: flicker 6s infinite;
+    }
+
+    @keyframes flicker {
+      0%,95%,100% { opacity: 1; }
+      96% { opacity: 0.82; }
+      97% { opacity: 1; }
+      98.5% { opacity: 0.88; }
+      99% { opacity: 1; }
+    }
+
+    .tagline {
+      margin-top: 2.5rem;
+      font-size: clamp(11px, 1.4vw, 15px);
+      color: var(--green-dim);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .tagline span { color: var(--green); }
+
+    .links {
+      margin-top: 2rem;
+      display: flex;
+      gap: 2.5rem;
+      font-size: clamp(10px, 1.2vw, 13px);
+      letter-spacing: 0.15em;
+    }
+
+    .links a {
+      color: var(--green-dim);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.15s, text-shadow 0.15s;
+      border-bottom: 1px solid var(--green-faint);
+      padding-bottom: 2px;
+    }
+
+    .links a:hover {
+      color: var(--green);
+      text-shadow: 0 0 8px rgba(0,255,65,0.8);
+      border-bottom-color: var(--green-dim);
+    }
+
+    .cursor-line {
+      margin-top: 2.5rem;
+      font-size: clamp(10px, 1.1vw, 13px);
+      color: var(--green-dim);
+      letter-spacing: 0.1em;
+      min-height: 1.4em;
+    }
+
+    .typed-text { color: var(--green); }
+
+    .cursor {
+      display: inline-block;
+      width: 0.6em;
+      height: 1em;
+      background: var(--green);
+      vertical-align: text-bottom;
+      animation: blink 1.1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .partner {
+      margin-top: 1.8rem;
+      font-size: clamp(9px, 1vw, 11px);
+      color: #002a08;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-align: center;
+      transition: color 2s;
+    }
+
+    .partner.visible { color: #005510; }
+    .partner span { color: #007718; }
+  </style>
+</head>
+<body>
+
+<pre class="ascii-banner">______ ___________ _   __ ___________ _       ___  ______  _____
+|___  /|  ___| ___ \ | / /|  ___| ___ \ |     / _ \ | ___ \/  ___|
+   / / | |__ | |_/ / |/ / | |__ | |_/ / |    / /_\ \| |_/ /\ `--.
+  / /  |  __||    /|    \ |  __||    /| |    |  _  || ___ \ `--. \
+./ /___| |___| |\ \| |\  \| |___| |\ \| |____| | | || |_/ //\__/ /
+\_____/\____/\_| \_\_| \_/\____/\_| \_\_____/\_| |_/\____/ \____/</pre>
+
+  <div class="tagline">
+    <span>trust</span> is infrastructure
+  </div>
+
+  <div class="links">
+    <a href="/about">about</a>
+    <a href="https://treeship.dev" target="_blank">treeship.dev</a>
+    <a href="/blog">blog</a>
+  </div>
+
+  <div class="cursor-line">
+    C:\ZERKER&gt;&nbsp;<span class="typed-text" id="typed"></span><span class="cursor" id="cur"></span>
+  </div>
+
+  <div class="partner" id="partner">
+    in partnership with <span>SRI International</span>
+  </div>
+
+  <script>
+    const lines = [
+      "solving trust in AI_",
+      "first product: treeship.dev_",
+      "every agent action deserves a receipt_",
+    ];
+
+    let lineIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    let pauseTicks = 0;
+    const el = document.getElementById('typed');
+
+    function type() {
+      const current = lines[lineIndex];
+
+      if (!deleting) {
+        el.textContent = current.slice(0, charIndex + 1).replace(/_$/, '');
+        charIndex++;
+        if (charIndex >= current.length) {
+          deleting = true;
+          pauseTicks = 0;
+          setTimeout(type, 1800);
+          return;
+        }
+        setTimeout(type, 48);
+      } else {
+        if (pauseTicks < 1) { pauseTicks++; setTimeout(type, 80); return; }
+        el.textContent = current.slice(0, charIndex - 1).replace(/_$/, '');
+        charIndex--;
+        if (charIndex <= 0) {
+          deleting = false;
+          lineIndex = (lineIndex + 1) % lines.length;
+          charIndex = 0;
+          setTimeout(type, 400);
+          return;
+        }
+        setTimeout(type, 28);
+      }
+    }
+
+    setTimeout(type, 900);
+
+    // Fade in SRI line
+    setTimeout(() => {
+      document.getElementById('partner').classList.add('visible');
+    }, 2000);
+  </script>
+
+</body>
+</html>
